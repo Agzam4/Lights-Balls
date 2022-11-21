@@ -6,11 +6,11 @@ public class Updates {
 
 	public static final int defHp = 1; // 1
 	public static final int defShieldTime = 0; // 0
-	public static final int defSize = 20; // 20
+	public static final int defSize = 5; // 20
 	public static final int defDamage = 5; // 5
 
 	public static int stage = 0;
-	public static int $ = 25; // 25
+	public static int $ = 0; // 25
 
 	private static int[] defUpdates = {defHp, defShieldTime, defSize, defDamage};
 	private static int[] updates = {defHp, defShieldTime, defSize, defDamage};
@@ -55,13 +55,13 @@ public class Updates {
 	public static int getCost(int id) {
 		switch (id) {
 		case UPDATE_HP:
-			return 24+updates[UPDATE_HP]*2;
+			return (24+updates[UPDATE_HP]*updates[UPDATE_HP]*2)*50;
 		case UPDATE_SIZE:
-			return (int) Math.ceil(10+(updates[UPDATE_SIZE]/1.5));
+			return ((int) Math.ceil(10+(updates[UPDATE_SIZE]*updates[UPDATE_SIZE]/10))*4)*10;
 		case UPDATE_TIME:
-			return 25+(updates[UPDATE_TIME]/2);
+			return (25+((updates[UPDATE_TIME] + updates[UPDATE_HP])/5))*10;
 		case UPDATE_DAMAGE:
-			return (int) Math.ceil(updates[UPDATE_DAMAGE]*2);
+			return ((int) Math.ceil(updates[UPDATE_DAMAGE]))*20;
 		default:
 			return 0;
 		}

@@ -84,6 +84,39 @@ public class Ball extends RoundGameObject {
 		}else {
 			setTargetDiameter(mainDiameter);
 		}
+		
+		/*
+		 ***************************************************************************************************** 
+		 ***************************************************************************************************** 
+		 ***************************************************************************************************** 
+		 ***************************************************************************************************** 
+		 ***************************************************************************************************** 
+		 */
+		if(game.getStage() == 4) {
+//			Player player = game.getPlayer();
+//			double dist = Math.hypot(player.x - x, player.y-y);
+//			if(dist < 1) dist = 1;
+//			double targerDir = Math.atan2(player.y-y, player.x-x);
+//			
+//			vx += Math.cos(targerDir)*diameter/5d/dist;
+//			vy += Math.sin(targerDir)*diameter/5d/dist;
+//			
+//			int ky = -1;
+//			if(game.getPlayer().y < 0) ky = 1;
+			
+//			int kx = -1;
+//			if(game.getPlayer().x < 0) kx = 1;
+
+//			vx -= diameter*kx/50d;
+//			vy -= .25d;
+//			
+//			double dir = Math.atan2(vy, vx);
+//			double mod = Math.hypot(vx, vy);
+//			if(mod > diameter/2) {
+//				vx = diameter/2d*Math.cos(dir);
+//				vy = diameter/2d*Math.sin(dir);
+//			}
+		}
 	}
 	
 	public void setTargetDiameter(double d) {
@@ -94,7 +127,11 @@ public class Ball extends RoundGameObject {
 	transient public static Sound soundPop = new Sound("/sounds/ball.pop.mp3");
 	
 	protected void doDestroy(boolean isDestroyed) {
-		Updates.$ += mainDiameter/10;
+		Updates.$ += mainDiameter/10 * (game.getStage()+1);
+		playDestroySound(isDestroyed);
+	}
+	
+	protected void playDestroySound(boolean isDestroyed) {
 		if(isDestroyed) {
 			soundDeath.play(0);
 		}else {

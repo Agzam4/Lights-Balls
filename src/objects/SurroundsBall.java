@@ -12,7 +12,10 @@ public class SurroundsBall extends Ball {
 		super(game, diameter, direction);
 		color = new Color(75, 0, 255);
 		this.k = k;
+		hp = diameter*15;
 	}
+	
+	double speed = 3.378;
 
 	@Override
 	public void update() {
@@ -21,24 +24,39 @@ public class SurroundsBall extends Ball {
 		double targerDir = Math.atan2(player.x-x, player.y-y);
 		double nvx = Math.sin(targerDir);
 		double nvy = Math.cos(targerDir);
-		vx = (vx - nvx)/2 + nvx;
-		vy = (vy - nvy)/2 + nvy;
+
+		if(Math.hypot(player.x - x, player.y-y) < mainDiameter + player.diameter*25) {
+			vx = (vx - nvx)/2 + nvx;
+			vy = (vy - nvy)/2 + nvy;
+			
+			dir = Math.atan2(vx, vy);
+			dir += Math.toRadians(15*k);
+
+
+			speed -= 3.378 / 1000d;
+			if(speed < 3.378 / 5d) speed = 3.378 / 5d;
+		} else {
+//			speed = 3.378;// / 2d;
+			speed += 3.378 / 1000d;
+			if(speed > 3.378) speed = 3.378;
+		}
+		vx = (speed/3.378*(diameter)/5d)*Math.sin(dir);
+		vy = (speed/3.378*(diameter)/5d)*Math.cos(dir);
 		
-		dir = Math.atan2(vx, vy);
-		dir += Math.toRadians(15*k);
-		vx = (3.378)*Math.sin(dir);
-		vy = (3.378)*Math.cos(dir);
 		super.update();
 	}
 	
 	@Override
 	public void destroy() {
-		Updates.$ += mainDiameter/10;
+		Updates.$ += mainDiameter/7;
 		if(mainDiameter > 10) {
+			playDestroySound(true);
 			double dir = Math.toDegrees(Math.atan2(vx, vy));
 			for (int i = 0; i < 360; i+=120) {
 				destroyAddObject(i, dir);
 			}
+		}else {
+			playDestroySound(false);
 		}
 		isNeedDestroy = true;
 	}

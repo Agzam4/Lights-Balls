@@ -110,6 +110,8 @@ public class Menu implements Serializable {
 	String[] updatesText = {"HP","Shield Time", "Weapon size", "Damage"};
 	Button hp = new Button("+HP");
 	
+//	Button levelSelect = new Button("Levels");
+	
 	public void draw(Graphics2D g) {
 		g.setStroke(new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g.setColor(Color.BLACK);
@@ -128,6 +130,8 @@ public class Menu implements Serializable {
 		for (Text txt : updatesInfo) {
 			txt.draw(g);
 		}
+		
+		
 	}
 	
 	private void drawRect(Graphics2D g, int x, int y, int w, int h) {

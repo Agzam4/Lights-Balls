@@ -80,7 +80,7 @@ public class Mouse {
 	}
 	
 	public static int getMouseSize() {
-		return mouseSize;
+		return mouseSize*4;
 	}
 	
 	public static void setMouseSize(int mouseSize) {

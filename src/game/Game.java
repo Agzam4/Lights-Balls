@@ -35,6 +35,7 @@ public class Game implements Serializable {
 		objects = new ArrayList<GameObject>();
 		tmpObjects = new ArrayList<GameObject>();
 		player = new Player();
+		player.game = this;
 		player.reload();
 		shield = new Shield(player);
 		
@@ -54,6 +55,13 @@ public class Game implements Serializable {
 	private static final int TUTORIAL_SHIFT = 1;
 	private static final int TUTORIAL_BALL = 2;
 	
+//	private static final String[] levels = {
+//			"W",
+//			"WWB",
+//			"WWWR",
+//			"WBY"
+//	};
+	
 	private void start() {
 		if(startBallSize > 50) {
 			Updates.setAllUpdate(stage+1);
@@ -68,20 +76,35 @@ public class Game implements Serializable {
 		
 		
 		
-		
 		Updates.stage = stage;
-		
-		objects.add(new Ball(this, startBallSize+stage, null));
 
-		if(stage%2==1) {
+		objects.add(new Ball(this, startBallSize+stage, null));
+		
+		
+		int count = Math.min(3, stage);
+		
+		int stageNum = stage;
+		if(stage >= 6) stageNum++;
+//		if(stage >= 7) stageNum+=3;
+		
+		if(stageNum%2==1 && stage != 7 || stage == 8) {
 			objects.add(new SurroundsBall(this, startBallSize+(stage-1), null, 1));	
-			objects.add(new SurroundsBall(this, startBallSize+(stage-1), null, -1));	
+			objects.add(new SurroundsBall(this, startBallSize+(stage-1), null, -1));
+			count--;
 		}
-		if(stage%4==3) {
+		if(stageNum%3==2 || stage == 7 || stage == 8) {
 			objects.add(new AIBall(this, startBallSize+(stage-2), null));	
+			count--;
 		}
-		if(stage%10==9) {
+		if(stageNum%4==3 || stage == 7 || stage == 8) {
 			objects.add(new SpinlineBall(this, startBallSize, null));	
+			count--;
+		}
+		
+		System.out.println(count);
+		
+		for (int i = 0; i < count; i++) {
+			objects.add(new Ball(this, startBallSize+stage, null));
 		}
 //		objects.add(ball2);		
 //		objects.add(ball3);		
@@ -105,9 +128,22 @@ public class Game implements Serializable {
 	}
 	
 	public void update() {
+//		System.out.println(stage);
 //		Updates.setAllUpdate(99);
 		Mouse.mouseSize = Updates.getUpdate(Updates.UPDATE_SIZE);
 
+		if(Keyboard.isKeyPressed(Keyboard.UP) && Keyboard.isKeyPressed(Keyboard.DOWN) && Keyboard.isKeyPressed(Keyboard.SPACE) && objects.size() > 0) {
+//			for (int i = 0; i < objects.size(); i++) {
+//				objects.get(0).destroy();
+//			}
+			objects.clear();
+			Keyboard.releaseKey(Keyboard.SPACE);
+		}
+		
+		if(Keyboard.isKeyPressed(Keyboard.LEFT) && Keyboard.isKeyPressed(Keyboard.RIGHT) && Keyboard.isKeyPressed(Keyboard.SPACE) && objects.size() > 0) {
+			Updates.$ += 100;
+			Keyboard.releaseKey(Keyboard.SPACE);
+		}
 		
 		if(txtLen < tutorialText.length()) {
 			txtLen+=0.3;
@@ -133,7 +169,7 @@ public class Game implements Serializable {
 				}
 			}
 			if(stageTutorial == TUTORIAL_KEYS) {
-				tutorialText = "Use Arrow Keys to Move";
+				tutorialText = "Use WASD to Move";
 				player.update();
 				if(player.isMoved()) {
 					stageTutorial = TUTORIAL_SHIFT;
@@ -151,12 +187,13 @@ public class Game implements Serializable {
 			menu.notNeedStart();
 		}
 		if(menu.isVisible()) return;
-		
+			
 		if(getObjectsCount() == 0) {
 			if(stage == STAGE_TUTORIAL) {
 				stage = 0;
 			}
 			menu.show("You win");
+			Updates.$ += startBallSize * 25 * (stage+1);
 			startBallSize += 5;
 		}
 		
@@ -209,7 +246,6 @@ public class Game implements Serializable {
 	double txtLen = 0;
 	
 	public void draw(Graphics2D g) {
-		
 		g.setColor(new Color(0,0,0,20)); // 20
 		g.fillRect(0, 0, gameWidth, gameHeight);
 		
@@ -294,5 +330,9 @@ public class Game implements Serializable {
 	
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public int getStage() {
+		return stage;
 	}
 }

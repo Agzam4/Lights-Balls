@@ -12,6 +12,9 @@ import javax.swing.border.EmptyBorder;
 
 import game.Saving;
 import game.Updates;
+import objects.AIBall;
+import objects.SpinlineBall;
+import objects.SurroundsBall;
 
 public class JMain extends JFrame {
 
@@ -29,6 +32,7 @@ public class JMain extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		Updates.load();
 		for (int i = 0; i < args.length; i++) {
 			System.out.println(args[i]);

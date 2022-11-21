@@ -28,7 +28,11 @@ public class RoundGameObject extends GameObject {
 		g.drawOval(getX(), getY(), diameter, diameter);
 		if(fillAlpha > 0) {
 			Color c = g.getColor();
-			g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), fillAlpha));
+			if(fillAlpha < 240) {
+				g.setColor(new Color(c.getRed()*fillAlpha/255, c.getGreen()*fillAlpha/255, c.getBlue()*fillAlpha/255, fillAlpha));
+			} else {
+				g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), fillAlpha));
+			}
 			g.fillOval(getX(), getY(), diameter, diameter);
 			g.setColor(c);
 		}

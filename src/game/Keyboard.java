@@ -35,16 +35,16 @@ public class Keyboard {
 			
 			private void set(boolean b, int key) {
 				switch (key) {
-				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_D:
 					keys[RIGHT] = b;
 					break;
-				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_A:
 					keys[LEFT] = b;
 					break;
-				case KeyEvent.VK_UP:
+				case KeyEvent.VK_W:
 					keys[UP] = b;
 					break;
-				case KeyEvent.VK_DOWN:
+				case KeyEvent.VK_S:
 					keys[DOWN] = b;
 					break;
 				case KeyEvent.VK_SPACE:
@@ -62,5 +62,9 @@ public class Keyboard {
 	
 	public static boolean isKeyPressed(int key) {
 		return keys[key];
+	}
+	
+	public static void releaseKey(int key) {
+		keys[key] = false;
 	}
 }

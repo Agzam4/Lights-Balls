@@ -3,15 +3,22 @@ package objects;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
-public class Line extends GameObject {
+public class Line extends GameObject implements Serializable {
 
 	float size;
 	double dir;
 	int len;
 	Color color = Color.WHITE;
-	
+
 	public Line(int dir, float size) {
+		this.size = size;
+		this.dir = dir;
+		len = (int) Math.hypot(gameWidth, gameHeight);
+	}
+	
+	public Line(double dir, float size) {
 		this.size = size;
 		this.dir = dir;
 		len = (int) Math.hypot(gameWidth, gameHeight);
@@ -65,7 +72,8 @@ public class Line extends GameObject {
 
 	@Override
 	public boolean isTouchesRObject(RoundGameObject o) {// LINE/CIRCLE
-
+		if(power >= 5) return false;
+		
 		double r = o.diameter/2 + size/2;
 		
 		double x1 = o.getX() - getX() + r;
