@@ -13,7 +13,8 @@ public class Keyboard {
 	public static final int DOWN = 3;
 	public static final int SPACE = 4;
 	public static final int SHIFT = 5;
-	public static boolean[] keys = new boolean[6];
+	public static final int RECORD = 6;
+	public static boolean[] keys = new boolean[7];
 	
 	public static void link(JComponent c) {
 		c.addKeyListener(new KeyListener() {
@@ -52,6 +53,9 @@ public class Keyboard {
 					break;
 				case KeyEvent.VK_SHIFT:
 					keys[SHIFT] = b;
+					break;
+				case KeyEvent.VK_R:
+					keys[RECORD] = b;
 					break;
 				default:
 					break;

@@ -10,7 +10,7 @@ public class Sound {
 
 	transient private Clip clip;
 	transient private boolean isPlaying = false;
-	
+
 	public Sound(String path) {
 		try {
 			AudioInputStream ais = null;
@@ -49,12 +49,14 @@ public class Sound {
 	public void play(int loops) {
 		play(loops, 0);
 	}
-	
+
 	long lastPlay = 0;
-	
+
+	long playRefresh = 100;
+
 	public void play(int loops, int framePosition) {
 		long now = System.nanoTime();
-		if(now-lastPlay > 100) {
+		if(now-lastPlay > playRefresh) {
 			lastPlay = now;
 			Thread player = new Thread(() -> {
 				try {
@@ -70,7 +72,22 @@ public class Sound {
 			player.start();
 		}
 	}
-	
+
+	public void justplay() {
+//		Thread player = new Thread(() -> {
+			try {
+				if(clip == null) return;
+//				stop();
+				clip.setFramePosition(0);
+				clip.loop(0);
+				clip.start();
+				isPlaying = true;
+			} catch (Exception e) {
+			}
+//		});
+//		player.start();
+	}
+
 	public void stop() {
 		isPlaying = false;
 		try {
@@ -78,22 +95,27 @@ public class Sound {
 		} catch (Exception e) {
 		}
 	}
-	
+
 	public void close() {
 		isPlaying = false;
 		try {
-		stop();
-		clip.close();
+			stop();
+			clip.close();
 		} catch (Exception e) {
 		}
 	}
-	
+
 	public void setVolume(float volume) {
-	    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);        
-	    gainControl.setValue(20f * (float) Math.log10(volume));
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);        
+		gainControl.setValue(20f * (float) Math.log10(volume));
 	}
-	
+
 	public boolean isPlaying() {
 		return isPlaying;
 	}
+	
+	public void setPlayRefresh(long playRefresh) {
+		this.playRefresh = playRefresh;
+	}
+
 }

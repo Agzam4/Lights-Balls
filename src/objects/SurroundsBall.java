@@ -13,9 +13,12 @@ public class SurroundsBall extends Ball {
 		color = new Color(75, 0, 255);
 		this.k = k;
 		hp = diameter*15;
+		musicChannel = 1;
 	}
 	
 	double speed = 3.378;
+	
+	transient boolean mode = false;
 
 	@Override
 	public void update() {
@@ -35,10 +38,15 @@ public class SurroundsBall extends Ball {
 
 			speed -= 3.378 / 1000d;
 			if(speed < 3.378 / 5d) speed = 3.378 / 5d;
+			if(!mode) {
+				playNote();
+			}
+			mode = true;
 		} else {
 //			speed = 3.378;// / 2d;
 			speed += 3.378 / 1000d;
 			if(speed > 3.378) speed = 3.378;
+			mode = false;
 		}
 		vx = (speed/3.378*(diameter)/5d)*Math.sin(dir);
 		vy = (speed/3.378*(diameter)/5d)*Math.cos(dir);

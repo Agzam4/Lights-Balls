@@ -13,6 +13,7 @@ public class SpinlineBall extends Ball {
 		vy /= 2;
 
 		hp = diameter*50;
+		musicChannel = 3;
 	}
 	
 	@Override
@@ -55,6 +56,7 @@ public class SpinlineBall extends Ball {
 	public void destroyAddObject(int i, double dir) {
 		SpinningLine line = new SpinningLine(i, mainDiameter/5f);
 		line.setColor(color);
+		line.music = game.getMusic();
 		game.addObject(x, y, line);
 		
 		game.addObject(x, y, new SpinlineBall(game, (int) (mainDiameter/2), (int) (dir+i)));

@@ -40,6 +40,14 @@ public class Ball extends RoundGameObject {
 	int spawnTime;
 	int time = 0;
 	
+	int musicChannel = 0;
+	
+	protected void playNote() {
+		double dAngle = Math.toDegrees(Math.atan2(vy, vx));
+		if(dAngle < 0) dAngle = 360 + dAngle%360;
+		game.getMusic().playNote(musicChannel, dAngle / 360d);
+	}
+	
 	@Override
 	public void update() {
 		time++;
@@ -47,11 +55,13 @@ public class Ball extends RoundGameObject {
 		if(isTouchesBorders()) {
 			vx *= -1;
 			moveX(vx);
+			playNote();
 		}
 		moveY(vy);
 		if(isTouchesBorders()) {
 			vy *= -1;
 			moveY(vy);
+			playNote();
 		}
 		
 		if(spawnTime > 0) {
@@ -173,5 +183,9 @@ public class Ball extends RoundGameObject {
 	public void turnAwayFrom(Shield shield) {
 		hp -= Updates.shieldDamage;
 		super.turnAwayFrom(shield);
+	}
+	
+	public void setSpawnTime(int spawnTime) {
+		this.spawnTime = spawnTime;
 	}
 }

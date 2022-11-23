@@ -14,6 +14,8 @@ public class AIBall extends Ball {
 		
 		speed = -.5;
 		if(direction != null) savedDir = Math.toRadians(direction);
+		
+		musicChannel = 2;
 	}
 	
 	int timer = 0;
@@ -22,9 +24,14 @@ public class AIBall extends Ball {
 	double savedDir = 0;
 	boolean isDashSet = false;
 	
+	
 	@Override
 	public void update() {
 		timer++;
+		
+		if(time % 10 == 0 && spawnTime > 0 || speed <= -1.25) {
+			playNote();
+		}
 		Player player = game.getPlayer();
 		double dist = Math.hypot(player.x - x, player.y-y);
 		
@@ -42,6 +49,7 @@ public class AIBall extends Ball {
 		
 		
 		speed -= 0.005 * Math.random();
+		
 		if(speed <= -.75 && !(speed <= -1.25)) {
 			vx += (diameter/2d)*Math.sin(savedDir);
 			vy += (diameter/2d)*Math.cos(savedDir);

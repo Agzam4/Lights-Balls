@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.stream.IntStream;
 
 import Menu.Menu;
+import bossthreads.Boss1Thread;
+import bossthreads.BossThread;
 import objects.AIBall;
 import objects.Ball;
 import objects.GameObject;
@@ -29,9 +31,12 @@ public class Game implements Serializable {
 	private Player player;
 	private Shield shield;
 	
+	private transient Music music;
+	
 	Menu menu;
 	
 	public Game() {
+		
 		objects = new ArrayList<GameObject>();
 		tmpObjects = new ArrayList<GameObject>();
 		player = new Player();
@@ -48,7 +53,7 @@ public class Game implements Serializable {
 	}
 
 	int startBallSize = 10;  // 10
-	int stage = STAGE_TUTORIAL;
+	int stage = 0; // STAGE_TUTORIAL;
 	
 	int stageTutorial = TUTORIAL_KEYS;
 	private static final int TUTORIAL_KEYS = 0;
@@ -62,50 +67,68 @@ public class Game implements Serializable {
 //			"WBY"
 //	};
 	
+	private transient boolean isRecording = false;
+	
+	BossThread bossThread;
+	
 	private void start() {
-		if(startBallSize > 50) {
+//		getMusic().clearLog();
+		
+		System.out.println(bossThread);
+		
+		if(startBallSize > 50) { // 55
+			bossThread = null;
 			Updates.setAllUpdate(stage+1);
 			Updates.$ = 0;
 			startBallSize = 10;
 			stage++;
 		}
 		
+//		if(startBallSize > 50) {
+//			if(stage == 0) {
+//				bossThread = new Boss1Thread();
+//			}
+//			bossThread.setGame(this);
+//		}
+		
 		player.reload();
 		objects.clear();
 		tmpObjects.clear();
 		
-		
-		
 		Updates.stage = stage;
-
-		objects.add(new Ball(this, startBallSize+stage, null));
 		
-		
-		int count = Math.min(3, stage);
-		
-		int stageNum = stage;
-		if(stage >= 6) stageNum++;
-//		if(stage >= 7) stageNum+=3;
-		
-		if(stageNum%2==1 && stage != 7 || stage == 8) {
-			objects.add(new SurroundsBall(this, startBallSize+(stage-1), null, 1));	
-			objects.add(new SurroundsBall(this, startBallSize+(stage-1), null, -1));
-			count--;
-		}
-		if(stageNum%3==2 || stage == 7 || stage == 8) {
-			objects.add(new AIBall(this, startBallSize+(stage-2), null));	
-			count--;
-		}
-		if(stageNum%4==3 || stage == 7 || stage == 8) {
-			objects.add(new SpinlineBall(this, startBallSize, null));	
-			count--;
-		}
-		
-		System.out.println(count);
-		
-		for (int i = 0; i < count; i++) {
+		if(bossThread == null) {
 			objects.add(new Ball(this, startBallSize+stage, null));
+			
+			
+			int count = Math.min(3, stage);
+			
+			int stageNum = stage;
+			if(stage >= 6) stageNum++;
+//			if(stage >= 7) stageNum+=3;
+			
+			if(stageNum%2==1 && stage != 7 || stage == 8) {
+				objects.add(new SurroundsBall(this, startBallSize+(stage-1), null, 1));	
+				objects.add(new SurroundsBall(this, startBallSize+(stage-1), null, -1));
+				count--;
+			}
+			if(stageNum%3==2 || stage == 7 || stage == 8) {
+				objects.add(new AIBall(this, startBallSize+(stage-2), null));	
+				count--;
+			}
+			if(stageNum%4==3 || stage == 7 || stage == 8) {
+				objects.add(new SpinlineBall(this, startBallSize, null));	
+				count--;
+			}
+			
+			System.out.println(count);
+			
+			for (int i = 0; i < count; i++) {
+				objects.add(new Ball(this, startBallSize+stage, null));
+			}
 		}
+		
+		
 //		objects.add(ball2);		
 //		objects.add(ball3);		
 //		objects.add(ball4);	
@@ -128,22 +151,34 @@ public class Game implements Serializable {
 	}
 	
 	public void update() {
+		if(bossThread != null) {
+			bossThread.update();
+		}
+		
+//		if(Keyboard.isKeyPressed(Keyboard.RECORD)) {
+//			isRecording = !isRecording;
+//			if(isRecording) {
+//				getMusic().clearLog();
+//			} else {
+//				System.out.println(getMusic().getLog().toString());
+//			}
+//			Keyboard.releaseKey(Keyboard.RECORD);
+//		}
+		
+		
 //		System.out.println(stage);
 //		Updates.setAllUpdate(99);
 		Mouse.mouseSize = Updates.getUpdate(Updates.UPDATE_SIZE);
 
-		if(Keyboard.isKeyPressed(Keyboard.UP) && Keyboard.isKeyPressed(Keyboard.DOWN) && Keyboard.isKeyPressed(Keyboard.SPACE) && objects.size() > 0) {
-//			for (int i = 0; i < objects.size(); i++) {
-//				objects.get(0).destroy();
-//			}
-			objects.clear();
-			Keyboard.releaseKey(Keyboard.SPACE);
-		}
-		
-		if(Keyboard.isKeyPressed(Keyboard.LEFT) && Keyboard.isKeyPressed(Keyboard.RIGHT) && Keyboard.isKeyPressed(Keyboard.SPACE) && objects.size() > 0) {
-			Updates.$ += 100;
-			Keyboard.releaseKey(Keyboard.SPACE);
-		}
+//		if(Keyboard.isKeyPressed(Keyboard.UP) && Keyboard.isKeyPressed(Keyboard.DOWN) && Keyboard.isKeyPressed(Keyboard.SPACE) && objects.size() > 0) {
+//			objects.clear();
+//			Keyboard.releaseKey(Keyboard.SPACE);
+//		}
+//		
+//		if(Keyboard.isKeyPressed(Keyboard.LEFT) && Keyboard.isKeyPressed(Keyboard.RIGHT) && Keyboard.isKeyPressed(Keyboard.SPACE) && objects.size() > 0) {
+//			Updates.$ += 100;
+//			Keyboard.releaseKey(Keyboard.SPACE);
+//		}
 		
 		if(txtLen < tutorialText.length()) {
 			txtLen+=0.3;
@@ -189,12 +224,18 @@ public class Game implements Serializable {
 		if(menu.isVisible()) return;
 			
 		if(getObjectsCount() == 0) {
-			if(stage == STAGE_TUTORIAL) {
-				stage = 0;
+			boolean isWin = true;
+			if(bossThread != null) {
+				isWin = bossThread.isEnded();
 			}
-			menu.show("You win");
-			Updates.$ += startBallSize * 25 * (stage+1);
-			startBallSize += 5;
+			if(isWin) {
+				if(stage == STAGE_TUTORIAL) {
+					stage = 0;
+				}
+				menu.show("You win");
+				Updates.$ += startBallSize * 25 * (stage+1);
+				startBallSize += 5;
+			}
 		}
 		
 		if(!player.isAlive() && stage != STAGE_TUTORIAL) {
@@ -253,7 +294,8 @@ public class Game implements Serializable {
 		g.drawRect(0, 0, gameWidth-1, gameHeight-1);
 		
 		g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 15));
-		String exitStr = "Esc or Alt + F4 to exit";
+		String exitStr = (isRecording ? "RECORDING |" : "") + "Esc or Alt + F4 to exit";
+		
 		g.drawString(exitStr,
 				gameWidth - g.getFontMetrics().stringWidth(exitStr + "_"),
 				gameHeight - g.getFont().getSize());
@@ -334,5 +376,29 @@ public class Game implements Serializable {
 	
 	public int getStage() {
 		return stage;
+	}
+	
+	public Music getMusic() {
+		if(music == null) {
+			loadMusic();
+		}
+		return music;
+	}
+
+	private void loadMusic() {
+		music = new Music();//new Music[4];
+		music.run();
+//		for (int i = 0; i < music.length; i++) {
+//			music[i] = musicTypes[i], musicTime[i], musicCount[i]);
+//			music[i].run();
+//		}		
+	}
+	
+	public int getGameWidth() {
+		return gameWidth;
+	}
+	
+	public int getGameHeight() {
+		return gameHeight;
 	}
 }
