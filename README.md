@@ -4,7 +4,7 @@
 
 ![Lines of code](https://img.shields.io/tokei/lines/github/agzam4/Lights-Balls?color=blueviolet&style=flat-square)
 # Lights-Balls
-### [Download LightBalls [v1.2.0]](https://github.com/Agzam4/Lights-Balls/releases/download/v1.2.0/LightBalls_1.2.0.jar)
+### [Download LightBalls [v1.4.0]](https://github.com/Agzam4/Lights-Balls/releases/download/v1.4.0/LightBalls_v1-4-0.zip)
 ![](https://img.shields.io/badge/%20-v1.2.0-blueviolet?style=for-the-badge)
 ![](https://img.shields.io/badge/%20-2%2C6%20MB-brightgreen?style=for-the-badge)
 ![](https://img.shields.io/github/downloads/agzam4/Dungeon-Underground-traps/total?color=007FFF&label=%20&style=for-the-badge&logo=docusign&logoColor=FFF)
