@@ -53,7 +53,7 @@ public class Game implements Serializable {
 	}
 
 	int startBallSize = 10;  // 10
-	int stage = 0; // STAGE_TUTORIAL;
+	int stage = STAGE_TUTORIAL;
 	
 	int stageTutorial = TUTORIAL_KEYS;
 	private static final int TUTORIAL_KEYS = 0;
