@@ -161,8 +161,12 @@ public class Ball extends RoundGameObject {
 	}
 	
 	public void destroyAddObject(int i, double dir) {
-		game.addObject(x, y, new Line(i,  mainDiameter/5f));
-		game.addObject(x, y, new Ball(game, (int) (mainDiameter/1.5), (int) (dir+i)));
+		Line line = new Line(i,  mainDiameter/5f);
+		line.setColor(color);
+		game.addObject(x, y, line);
+		Ball ball = new Ball(game, (int) (mainDiameter/1.5), (int) (dir+i));
+		ball.setColor(color);
+		game.addObject(x, y, ball);
 	}
 	
 	
@@ -187,5 +191,13 @@ public class Ball extends RoundGameObject {
 	
 	public void setSpawnTime(int spawnTime) {
 		this.spawnTime = spawnTime;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 }

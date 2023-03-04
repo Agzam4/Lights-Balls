@@ -25,7 +25,7 @@ public class RoundGameObject extends GameObject {
 		width = diameter;
 		height = diameter;
 		g.setStroke(new BasicStroke(1f));
-		g.drawOval(getX(), getY(), diameter, diameter);
+		g.drawOval(getX(), getY(), width, height);
 		if(fillAlpha > 0) {
 			Color c = g.getColor();
 			if(fillAlpha < 240) {
@@ -33,7 +33,7 @@ public class RoundGameObject extends GameObject {
 			} else {
 				g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), fillAlpha));
 			}
-			g.fillOval(getX(), getY(), diameter, diameter);
+			g.fillOval(getX(), getY(), width, height);
 			g.setColor(c);
 		}
 	}
@@ -58,4 +58,9 @@ public class RoundGameObject extends GameObject {
 	public boolean isTouchesRObject(RoundGameObject o) {
 		return Math.hypot(x-o.x, y-o.y) < diameter/2 + o.diameter/2;
 	}
+	
+	public int getDiameter() {
+		return diameter;
+	}
+	
 }

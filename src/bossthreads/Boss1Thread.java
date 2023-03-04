@@ -1,8 +1,7 @@
 package bossthreads;
 
-import java.util.Iterator;
-
 import objects.Ball;
+import objects.InfoLine;
 
 public class Boss1Thread extends BossThread {
 
@@ -14,16 +13,12 @@ public class Boss1Thread extends BossThread {
 			if(step < 25*5) {
 				if(step%25 != 0) return;
 				int s = step/25;
-				
 				for (int i = 0; i < 360; i+=45) {
 					addBall(i%90 == 45 ? 15 : 20, i, 150, -game.getGameWidth()*s/15 + 10, -game.getGameHeight()*s/15);
 					addBall(i%90 == 45 ? 15 : 20, i, 150, game.getGameWidth()*s/15 + 10, -game.getGameHeight()*s/15);
 					addBall(i%90 == 45 ? 15 : 20, i, 150, -game.getGameWidth()*s/15 + 10, game.getGameHeight()*s/15);
 					addBall(i%90 == 45 ? 15 : 20, i, 150, game.getGameWidth()*s/15 + 10, game.getGameHeight()*s/15);
 				}
-				
-//				addBall(step%30 == 0 ? 25 : 10, -step*2 + 90, 150, game.getGameWidth()/2 - 10, 0);
-//				addBall(25, (270 - (step)), 150, 0, 0);
 			} else {
 				if(game.getObjectsCount() == 0) {
 					isEnded = true;
@@ -50,9 +45,8 @@ public class Boss1Thread extends BossThread {
 		
 		if(attack == 0) {
 			if(step < 360) {
-				Ball ball = new Ball(game, 10, step*2);
-				ball.setSpawnTime(150);
-				game.addObject(0, 0, ball);
+				int s = step;
+				addBall(10, s*3, 150, 0, 0, 25);
 			} else {
 				if(game.getObjectsCount() == 0) {
 					attack = 1;
@@ -62,11 +56,21 @@ public class Boss1Thread extends BossThread {
 		}
 		
 	}
-	
+
 	private void addBall(int diameter, Integer direction, int spawntime, int x, int y) {
 		Ball ball = new Ball(game, diameter, direction);
 		ball.setSpawnTime(spawntime);
-		game.addObject(x, y, ball);
+		InfoLine infoLine = new InfoLine(game, ball, ball.getColor(), direction, 0, diameter, 150);
+		infoLine.setPosition(x, y);
+		game.addObject(x, y, infoLine);
+	}
+	
+	private void addBall(int diameter, Integer direction, int spawntime, int x, int y, int time) {
+		Ball ball = new Ball(game, diameter, direction);
+		ball.setSpawnTime(spawntime);
+		InfoLine infoLine = new InfoLine(game, ball, ball.getColor(), direction, 0, diameter, time);
+		infoLine.setPosition(x, y);
+		game.addObject(x, y, infoLine);
 	}
 
 }

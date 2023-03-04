@@ -29,4 +29,12 @@ public abstract class BossThread implements Serializable {
 	public void setStep(int step) {
 		this.step = step;
 	}
+
+	protected int getPlayerX() {
+		return game.getGameWidth()/2 -game.getPlayer().getX() - game.getPlayer().getDiameter()/2;
+	}
+	
+	protected int getPlayerY() {
+		return game.getGameHeight()/2 -game.getPlayer().getY() - game.getPlayer().getDiameter()/2;
+	}
 }

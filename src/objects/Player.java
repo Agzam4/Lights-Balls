@@ -195,8 +195,25 @@ public class Player extends RoundGameObject {
 			}
 		}
 		
+//		double align = Math.atan2(vy, vx);
+//		double len = Math.hypot(vy, vx);
+//
+//		double dx = Math.abs(Math.cos(align)) - .5;
+//		double dy = Math.abs(Math.sin(align)) - .5;
+//		
+//		double tWidth = diameter + 5 * len * dx;
+//		double tHeight = diameter + 5 * len * dy;
+//
+//		dWidth = (dWidth - tWidth)/2d + tWidth;
+//		dHeight = (dHeight - tHeight)/2d + tHeight;
+//		
+//		width = (int) (dWidth);
+//		height = (int) (dHeight);
+		
 		super.update();
 	}
+	
+//	private transient double dWidth, dHeight;
 
 	int mlx, mly;
 	double mvx, mvy;
@@ -248,4 +265,10 @@ public class Player extends RoundGameObject {
 		return y-height*2 < gameHeight/-2 || y+height*2 > gameHeight/2 ||
 				x-width*2 < gameWidth/-2 || x+width*2 > gameWidth/2 ;
 	}
+
+	public void kill() {
+		hp = 0;
+		isAlive = false;
+	}
+	
 }
